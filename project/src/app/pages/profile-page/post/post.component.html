@@ -1,0 +1,40 @@
+@if(post(); as post){
+<app-avatar-circle
+  [avatarUrl]="post.author.avatarUrl"
+  class="size32"
+></app-avatar-circle>
+<main class="post-body">
+  <div class="post-header">
+    <strong class="post__author">
+      {{ post.author.firstName }} {{ post.author.lastName }}
+      <span class="post-created-at">{{ post.createdAt | dateAgo }}</span>
+    </strong>
+  </div>
+  <p class="medium-text">
+    {{ post.content }}
+  </p>
+
+  <div class="post-counters">
+    <span class="counter-amount">
+      <svg icon="comments" class="svg16"></svg>
+      <span class="counter-length">{{ comment().length }}</span>
+    </span>
+    <span class="counter-amount">
+      <svg icon="likes" class="svg16"></svg>
+      <span class="counter-length likes">{{ post.likes }}</span>
+    </span>
+  </div>
+
+  <div class="post__comments-wrapper">
+    @for (comment of comment(); track comment.id) {
+    <app-comment [comment]="comment"></app-comment>
+    }
+  </div>
+
+  <app-post-input
+    (created)="onCreated()"
+    [postId]="post.id"
+    [isCommentInput]="true"
+  ></app-post-input>
+</main>
+}

@@ -1,0 +1,56 @@
+:host {
+  background: var(--dark-color);
+  padding: 20px;
+  border: 1px solid var(--light-color);
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  grid-gap: 16px;
+}
+
+.post-body {
+  display: grid;
+  grid-gap: 12px;
+}
+
+.post__author {
+  color: var(--light-color);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.post-created-at {
+  color: var(--light-transparent-color);
+}
+
+.post-counters {
+  display: grid;
+  grid-template-columns: 40px 40px;
+  grid-gap: 8px;
+}
+
+.counter-amount {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.counter-length {
+  color: var(--primary-color);
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.likes {
+  color: var(--light-color);
+}
+
+.post__comments-wrapper {
+  padding: 8px 0;
+  max-height: 150px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  display: grid;
+  grid-gap: 8px;
+}

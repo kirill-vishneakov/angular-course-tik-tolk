@@ -1,0 +1,74 @@
+<app-profile-header></app-profile-header>
+
+<form class="profile-form__wrapper" [formGroup]="form">
+  <div class="profile-form">
+    <div class="two-columns">
+      <label class="tt-form-label">
+        <span class="tt-form-label-text">Имя</span>
+        <input
+          formControlName="firstName"
+          type="text"
+          class="tt-form-input"
+          placeholder="Введите данные"
+        />
+      </label>
+
+      <label class="tt-form-label">
+        <span class="tt-form-label-text">Фамилия</span>
+        <input
+          formControlName="lastName"
+          type="text"
+          class="tt-form-input"
+          placeholder="Введите данные"
+        />
+      </label>
+    </div>
+
+    <label class="tt-form-label">
+      <span class="tt-form-label-text">Telegram username</span>
+      <input
+        formControlName="username"
+        type="text"
+        class="tt-form-input"
+        placeholder="Введите данные"
+      />
+    </label>
+
+    <label class="tt-form-label">
+      <span class="tt-form-label-text">О себе</span>
+      <textarea
+        formControlName="description"
+        type="text"
+        class="tt-form-input tt-form-textarea"
+        placeholder="Введите данные"
+        rows="4"
+      ></textarea>
+    </label>
+
+    <label class="tt-form-label">
+      <span class="tt-form-label-text">Фото профиля</span>
+      <app-avatar-upload></app-avatar-upload>
+    </label>
+    <label class="tt-form-label">
+      <span class="tt-form-label-text">Навыки</span>
+      <input
+        formControlName="stack"
+        type="text"
+        class="tt-form-input"
+        placeholder="Введите данные"
+      />
+    </label>
+  </div>
+  <div>
+    <div class="profile-form__btns">
+      <button class="profile-form__btn">
+        <svg icon="delete"></svg>
+      </button>
+      <button class="profile-form__btn">
+        <svg icon="logout"></svg>
+      </button>
+      <button class="profile-form__canel_btn">Отмена</button>
+      <button class="btn" (click)="onSave()">Сохранить</button>
+    </div>
+  </div>
+</form>
