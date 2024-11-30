@@ -42,22 +42,19 @@ export class PostFeedComponent {
   }
 
   ngAfterViewInit() {
-    this.resizeFeed();
+    this.editHeight();
   }
 
   resizeFeed() {
     fromEvent(window, 'resize')
       .pipe(audit(() => interval(400)))
-      .subscribe(() => {
-        const { top } = this.hostElement.nativeElement.getBoundingClientRect();
-        const height = window.innerHeight - top - 24 - 24;
+      .subscribe(() => this.editHeight());
+  }
 
-        this.r2.setStyle(
-          this.hostElement.nativeElement,
-          'height',
-          height + 'px'
-        );
-        console.log(111);
-      });
+  editHeight() {
+    const { top } = this.hostElement.nativeElement.getBoundingClientRect();
+    const height = window.innerHeight - top - 24 - 24;
+
+    this.r2.setStyle(this.hostElement.nativeElement, 'height', height + 'px');
   }
 }

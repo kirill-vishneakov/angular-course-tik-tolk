@@ -1,0 +1,28 @@
+:host {
+  display: grid;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: var(--light-border);
+  color: var(--light-color);
+  place-content: center;
+  grid-template-columns: 50px 1fr;
+}
+
+.chat-header__user {
+  display: flex;
+  place-content: center;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--light-color);
+}
+
+.chat-header__icon {
+  border: var(--light-border);
+  padding: 14px;
+  border-radius: 2px;
+  text-decoration: none;
+  display: flex;
+  cursor: pointer;
+  color: var(--light-color);
+}

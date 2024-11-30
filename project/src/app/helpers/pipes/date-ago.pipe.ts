@@ -14,16 +14,7 @@ export class DateAgoPipe implements PipeTransform {
     const date = date_time[0].split('-');
     const time = date_time[1].split(':');
 
-    console.log(
-      'Дата:',
-      date,
-      'Время:',
-      time,
-      'Дата сейчас:',
-      date_now,
-      'Минуты сейчас',
-      time_now
-    );
+    time_now[0] = (Number(time_now[0]) - 3).toString();
 
     if (date_now[2] !== date[0]) return 'Несколько лет назад';
     if (date_now[1] !== date[1]) return 'Несколько месяцев назад';

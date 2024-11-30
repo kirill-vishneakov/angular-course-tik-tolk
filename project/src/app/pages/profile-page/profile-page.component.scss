@@ -8,9 +8,10 @@
 .to-settings-btn {
   width: 190px;
   text-decoration: none;
-  display: flex;
+  display: grid;
+  grid-gap: 12px;
+  grid-template-columns: 1fr 20px;
   align-items: center;
-  gap: 12px;
 }
 
 .to-settings-icon {

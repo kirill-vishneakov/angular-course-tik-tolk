@@ -18,7 +18,6 @@ import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component'
     RouterLink,
     RouterLinkActive,
     AsyncPipe,
-    ImgUrlPipe,
     AvatarCircleComponent,
   ],
   templateUrl: './sidebar.component.html',

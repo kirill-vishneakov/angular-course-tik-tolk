@@ -13,11 +13,12 @@ import { AvatarCircleComponent } from '../../../common-ui/avatar-circle/avatar-c
 import { SvgComponent } from '../../../common-ui/svg/svg.component';
 import { FormsModule, NgModel } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
+import { InputComponent } from '../../../common-ui/input/input.component';
 
 @Component({
   selector: 'app-post-input',
   standalone: true,
-  imports: [AvatarCircleComponent, SvgComponent, FormsModule],
+  imports: [AvatarCircleComponent, SvgComponent, FormsModule, InputComponent],
   templateUrl: './post-input.component.html',
   styleUrl: './post-input.component.scss',
 })
@@ -36,27 +37,17 @@ export class PostInputComponent {
     return this.isCommentInput();
   }
 
-  postText = '';
-
-  onTextareaInput(event: Event) {
-    const textarea = event.target as HTMLTextAreaElement;
-
-    this.r2.setStyle(textarea, 'height', 'auto');
-    this.r2.setStyle(textarea, 'height', textarea.scrollHeight + 'px');
-  }
-
-  onCreatePost() {
-    if (!this.postText) return;
+  onCreatePost(postText: string) {
+    if (!postText) return;
 
     if (this.isCommentInput()) {
       firstValueFrom(
         this.postService.createComment({
-          text: this.postText,
+          text: postText,
           authorId: this.profile()!.id,
           postId: this.postId(),
         })
       ).then(() => {
-        this.postText = '';
         this.created.emit();
       });
       return;
@@ -65,9 +56,9 @@ export class PostInputComponent {
     firstValueFrom(
       this.postService.createPost({
         title: 'Title',
-        content: this.postText,
+        content: postText,
         authorId: this.profile()!.id,
       })
-    ).then(() => (this.postText = ''));
+    );
   }
 }
