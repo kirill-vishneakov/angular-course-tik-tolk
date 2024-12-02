@@ -1,0 +1,11 @@
+<a class="subscriber-card__wrapper" [routerLink]="['/profile/', profile.id]">
+  <img
+    class="subscriber-avatar"
+    [src]="profile.avatarUrl | imgUrl"
+    alt="avatar"
+  />
+
+  <strong class="subtitle">{{
+    profile.firstName + ' ' + profile.lastName
+  }}</strong>
+</a>
