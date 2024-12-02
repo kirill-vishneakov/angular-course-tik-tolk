@@ -1,0 +1,43 @@
+:host {
+  display: grid;
+  grid-template-columns: 32px max-content;
+  grid-gap: 12px;
+}
+
+:host.is-mine {
+  grid-template-columns: max-content 32px;
+  justify-self: end;
+
+  .message-container {
+    order: -1;
+  }
+
+  .message-header {
+    text-align-last: right;
+  }
+  .message-text {
+    background: var(--primary-color);
+    color: var(--dark-color);
+    mask: linear-gradient(#000 0 0),
+      linear-gradient(-135deg, #000 50%, #0000 0) border-box 100% 100% / 200%
+        200% no-repeat;
+    mask-composite: exclude;
+    mask-position: 10% 94%;
+  }
+}
+
+.message-header {
+  text-align-last: left;
+}
+
+.message-text {
+  padding: 8px 16px;
+  background: var(--message-color);
+  font-weight: 500;
+  color: var(--light-color);
+  mask: linear-gradient(#000 0 0),
+    linear-gradient(134deg, #000 50%, rgba(0, 0, 0, 0) 0) border-box 100% 100% /
+      200% 200% no-repeat;
+  mask-composite: exclude;
+  mask-position: 100% 50%;
+}

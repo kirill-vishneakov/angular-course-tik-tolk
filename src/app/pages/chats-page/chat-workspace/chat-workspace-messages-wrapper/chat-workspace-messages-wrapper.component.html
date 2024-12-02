@@ -1,0 +1,15 @@
+<div class="messages-wrapper">
+  @for(group of groupedMessages(); track group.messages){
+  <div class="messages__day">
+    {{ group.day }}
+  </div>
+  <div>
+    @for(message of group.messages; track message.id){
+    <app-chat-workspace-message
+      [message]="message"
+    ></app-chat-workspace-message>
+    }
+  </div>
+  }
+</div>
+<app-input (onClick)="onSendMessage($event)"></app-input>

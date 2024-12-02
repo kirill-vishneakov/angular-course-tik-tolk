@@ -1,0 +1,17 @@
+:host {
+  display: grid;
+  padding: 16px 20px;
+  grid-template-rows: 1fr min-content;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+
+.messages__day {
+  border: var(--light-border);
+  width: min-content;
+  margin: 0 auto;
+  padding: 6px 20px;
+  background: var(--dark-hover-color);
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
