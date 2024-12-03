@@ -13,7 +13,6 @@ export class ProfileService {
   url = 'https://icherniakov.ru/yt-course/';
   #globalStoreService = inject(GlobalStoreService);
   me = signal<Profile | null>(null);
-  filteredProfile = signal<Profile[]>([]);
 
   getTestsAccounts() {
     return this.http.get<Profile[]>(`${this.url}account/test_accounts`);
@@ -23,7 +22,7 @@ export class ProfileService {
     return this.http.get<Profile>(`${this.url}account/me`).pipe(
       tap((res) => {
         this.me.set(res);
-        this.#globalStoreService.me.set(res)
+        this.#globalStoreService.me.set(res);
       })
     );
   }
@@ -47,10 +46,8 @@ export class ProfileService {
   }
 
   filterProfiles(params: Record<string, any>) {
-    return this.http
-      .get<Pageble<Profile>>(`${this.url}account/accounts`, {
-        params,
-      })
-      .pipe(tap((res) => this.filteredProfile.set(res.items)));
+    return this.http.get<Pageble<Profile>>(`${this.url}account/accounts`, {
+      params,
+    });
   }
 }

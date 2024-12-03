@@ -1,6 +1,5 @@
 import { Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ProfileService } from '@tt/profile';
 
 @Component({
   selector: 'app-root',
@@ -9,6 +8,4 @@ import { ProfileService } from '@tt/profile';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
-export class AppComponent {
-  profileService = inject(ProfileService);
-}
+export class AppComponent {}
