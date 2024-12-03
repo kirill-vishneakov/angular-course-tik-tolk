@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { CommentCreateDto, PostCreateDto, Comment, Post } from '../';
+import { CommentCreateDto, PostCreateDto, Comment, Post } from '..';
 import { map, switchMap, tap } from 'rxjs';
 
 @Injectable({

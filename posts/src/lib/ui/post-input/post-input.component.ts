@@ -12,7 +12,7 @@ import {
 
 import { firstValueFrom } from 'rxjs';
 import { PostService } from '../../data';
-import { ProfileService } from '@tt/profile'
+import { GlobalStoreService } from '@tt/shared';
 
 @Component({
   selector: 'app-post-input',
@@ -26,7 +26,7 @@ export class PostInputComponent {
   postId = input<number>(0);
 
   r2 = inject(Renderer2);
-  profile = inject(ProfileService).me;
+  profile = inject(GlobalStoreService).me;
   postService = inject(PostService);
 
   @Output() created = new EventEmitter();

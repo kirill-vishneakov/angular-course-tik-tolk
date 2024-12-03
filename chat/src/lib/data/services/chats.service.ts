@@ -1,16 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Chat, LastMessageRes, Message } from '../interfaces/chats.interface';
-import { ProfileService } from '../../../../../profile/src/lib/data/services/profile.service';
 import { map, tap } from 'rxjs';
 import { DateTime } from 'luxon';
+import { GlobalStoreService } from '@tt/shared';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatsService {
   http = inject(HttpClient);
-  me = inject(ProfileService).me;
+  me = inject(GlobalStoreService).me;
   url = 'https://icherniakov.ru/yt-course/';
 
   lastMessageRes = signal<LastMessageRes[]>([]);

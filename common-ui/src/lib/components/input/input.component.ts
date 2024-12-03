@@ -1,4 +1,3 @@
-import { ChatsService } from '@tt/chat';
 import {
   Component,
   inject,
@@ -11,7 +10,7 @@ import {
 import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component';
 import { SvgComponent } from '../svg/svg.component';
 import { FormsModule } from '@angular/forms';
-import { ProfileService } from '@tt/profile';
+import { GlobalStoreService } from '@tt/shared';
 
 @Component({
   selector: 'app-input',
@@ -27,8 +26,7 @@ export class InputComponent {
 
   postText = '';
   r2 = inject(Renderer2);
-  profile = inject(ProfileService).me;
-  chatsService = inject(ChatsService);
+  profile = inject(GlobalStoreService).me;
 
   onTextareaInput(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;
