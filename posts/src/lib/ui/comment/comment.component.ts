@@ -4,7 +4,7 @@ import {
   AvatarCircleComponent,
 } from '@tt/common-ui';
 import { Component, inject, input, signal } from '@angular/core';
-import { Comment, postsActions } from '../../data';
+import { Comment, postsActions } from '../../../../../data-access/src/lib/posts';
 import { Store } from '@ngrx/store';
 
 @Component({

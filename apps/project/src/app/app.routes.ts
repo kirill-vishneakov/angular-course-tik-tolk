@@ -1,5 +1,5 @@
-import { ChatsEffects } from './../../../../chat/src/lib/data/store/effects';
-import { chatFeature } from './../../../../chat/src/lib/data/store/reducer';
+import { ChatsEffects } from '../../../../data-access/src/lib/chats/store/effects';
+import { chatFeature } from '../../../../data-access/src/lib/chats/store/reducer';
 import { FormComponent } from '@tt/form';
 import { postsFeature, PostsEffects } from '@tt/posts';
 import { provideEffects } from '@ngrx/effects';
@@ -18,7 +18,6 @@ import { provideState } from '@ngrx/store';
 
 export const routes: Routes = [
   { path: 'login', component: LoginPageComponent },
-
   {
     path: '',
     providers: [provideState(profileFeature), provideEffects(ProfileEffects)],
@@ -26,6 +25,7 @@ export const routes: Routes = [
     children: [
       {
         path: '',
+        providers: [provideState(profileFeature), provideEffects(ProfileEffects)],
         redirectTo: 'profile/me',
         pathMatch: 'full',
       },

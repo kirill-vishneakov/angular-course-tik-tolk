@@ -5,6 +5,7 @@ import { TokenResponse } from './auth.interface';
 import { CookieService } from 'ngx-cookie-service';
 import { Router } from '@angular/router';
 
+
 @Injectable({
   providedIn: 'root',
 })
@@ -17,7 +18,9 @@ export class AuthService {
   token: string | null = null;
   refreshToken: string | null = null;
 
+
   get isAuth() {
+
     if (!this.token) {
       this.token = this.cookieService.get('token');
       this.refreshToken = this.cookieService.get('refreshToken');

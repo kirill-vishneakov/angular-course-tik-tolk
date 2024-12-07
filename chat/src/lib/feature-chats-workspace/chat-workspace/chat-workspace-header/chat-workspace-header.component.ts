@@ -1,7 +1,8 @@
 import { Component, input } from '@angular/core';
-import { Profile } from '@tt/interfaces/profile';
+
 import { SvgComponent, AvatarCircleComponent } from '@tt/common-ui';
 import { RouterLink } from '@angular/router';
+import { Profile } from '@tt/data-access/profile';
 
 @Component({
   selector: 'app-chat-workspace-header',

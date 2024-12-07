@@ -4,7 +4,7 @@ import {
   profileActions,
   selectFilteredProfiles,
   selectSaveFilteredProfiles,
-} from '../../data';
+} from '../../../../../data-access/src/lib/profile';
 import {
   BehaviorSubject,
   debounceTime,

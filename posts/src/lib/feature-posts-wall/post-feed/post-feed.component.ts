@@ -4,21 +4,20 @@ import {
   HostListener,
   inject,
   Renderer2,
-  signal,
+
   ViewChild,
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { postsActions, PostService, selectPosts } from '../../data';
+import { postsActions, PostService, selectPosts } from '../../../../../data-access/src/lib/posts';
 import {
-  AvatarCircleComponent,
-  DateAgoPipe,
+
   InputComponent,
-  SvgComponent,
+
 } from '@tt/common-ui';
-import { GlobalStoreService } from '@tt/shared';
-import { CommentComponent } from '../../ui';
+
 import { FormsModule } from '@angular/forms';
 import { PostComponent } from '../post/post.component';
+import { ProfileService } from '@tt/data-access/profile';
 
 @Component({
   selector: 'app-post-feed',
@@ -37,14 +36,14 @@ export class PostFeedComponent {
 
   postService = inject(PostService);
 
-  profile = inject(GlobalStoreService).me;
+  profile = inject(ProfileService).me;
 
   title!: string;
 
   @HostListener('window:resize')
-  onWindowResize() {
+  onWindowResize(min = 48) {
     const { top } = this.hostElement.nativeElement.getBoundingClientRect();
-    const height = window.innerHeight - top - 24 - 24;
+    const height = window.innerHeight - top - min;
 
     this.r2.setStyle(this.hostElement.nativeElement, 'height', height + 'px');
   }
@@ -54,7 +53,7 @@ export class PostFeedComponent {
   }
 
   ngAfterViewInit() {
-    this.onWindowResize();
+    this.onWindowResize(48*2 + 24);
   }
 
   onCreatePost(postText: string) {

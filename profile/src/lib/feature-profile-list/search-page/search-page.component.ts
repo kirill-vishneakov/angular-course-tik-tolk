@@ -1,4 +1,4 @@
-import { selectFilteredProfiles } from './../../data';
+import { selectFilteredProfiles } from '../../../../../data-access/src/lib/profile';
 import { ProfileFiltersComponent } from '../profile-filters/profile-filters.component';
 import {
   Component,

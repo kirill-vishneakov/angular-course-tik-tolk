@@ -5,13 +5,12 @@ import {
   Output,
   EventEmitter,
   ViewChild,
-  ElementRef,
-  Input, input
+  ElementRef, input
 } from '@angular/core';
 import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component';
 import { SvgComponent } from '../svg/svg.component';
 import { FormsModule } from '@angular/forms';
-import { GlobalStoreService } from '@tt/shared';
+import { ProfileService } from '@tt/data-access/profile';
 
 @Component({
   selector: 'app-input',
@@ -28,7 +27,7 @@ export class InputComponent {
 
   postText = '';
   r2 = inject(Renderer2);
-  profile = inject(GlobalStoreService).me;
+  profile = inject(ProfileService).me;
 
   onTextareaInput(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;

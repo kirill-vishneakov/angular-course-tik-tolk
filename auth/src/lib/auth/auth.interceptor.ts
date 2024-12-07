@@ -14,7 +14,7 @@ import {
   throwError,
 } from 'rxjs';
 
-let isRefreshing$ = new BehaviorSubject<boolean>(false);
+const isRefreshing$ = new BehaviorSubject<boolean>(false);
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);

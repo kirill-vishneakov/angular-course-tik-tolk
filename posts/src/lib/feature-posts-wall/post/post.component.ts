@@ -4,12 +4,12 @@ import {
   AvatarCircleComponent,
   SvgComponent,
 } from '@tt/common-ui';
-import { Post, postsActions } from '../../data';
+import { Post, postsActions } from '../../../../../data-access/src/lib/posts';
 import { DateAgoPipe } from '@tt/common-ui';
 import { CommentComponent } from '../../ui/comment/comment.component';
 import { Store } from '@ngrx/store';
-import { GlobalStoreService } from '@tt/shared';
 import { FormsModule } from '@angular/forms';
+import { ProfileService } from '@tt/data-access/profile';
 
 @Component({
   selector: 'app-post',
@@ -27,7 +27,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class PostComponent {
   post = input.required<Post>();
-  profile = inject(GlobalStoreService).me;
+  profile = inject(ProfileService).me;
   store = inject(Store);
 
   ren = signal(false);

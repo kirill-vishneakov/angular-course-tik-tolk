@@ -1,2 +1,2 @@
 export * from './lib/feature-posts-wall';
-export * from './lib/data';
+export * from '../../data-access/src/lib/posts';

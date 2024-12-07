@@ -22,11 +22,11 @@
       "@tt/chat": ["chat/src/index.ts"],
       "@tt/common-ui": ["common-ui/src/index.ts"],
       "@tt/form": ["form/src/index.ts"],
-      "@tt/interfaces/*": ["interfaces/src/lib/*"],
       "@tt/layout": ["layout/src/index.ts"],
       "@tt/posts": ["posts/src/index.ts"],
       "@tt/profile": ["profile/src/index.ts"],
-      "@tt/shared": ["shared/src/index.ts"]
+      "@tt/shared": ["shared/src/index.ts"],
+      "@tt/data-access/*": ["data-access/src/lib/*"]
     },
     "baseUrl": ".",
     "rootDir": "."

@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Profile } from '@tt/interfaces/profile';
+import { Profile } from '@tt/data-access/profile';
+
 
 @Component({
   selector: 'app-profile-description',
