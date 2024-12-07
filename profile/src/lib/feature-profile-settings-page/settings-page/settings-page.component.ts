@@ -2,9 +2,11 @@ import { ProfileService } from '@tt/profile';
 import { Component, effect, inject, ViewChild } from '@angular/core';
 import { ProfileHeaderComponent, AvatarUploadComponent } from '../../ui';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { SvgComponent } from '@tt/common-ui';
+import { ImgUrlPipe, SvgComponent } from '@tt/common-ui';
 import { firstValueFrom } from 'rxjs';
 import { Store } from '@ngrx/store';
+import { ProfileDescriptionComponent } from '../../ui/profile-description/profile-description.component';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-settings-page',
@@ -14,6 +16,9 @@ import { Store } from '@ngrx/store';
     ReactiveFormsModule,
     SvgComponent,
     AvatarUploadComponent,
+    ProfileDescriptionComponent,
+    RouterLink,
+    ImgUrlPipe
   ],
   templateUrl: './settings-page.component.html',
   styleUrl: './settings-page.component.scss',
@@ -21,6 +26,7 @@ import { Store } from '@ngrx/store';
 export class SettingsPageComponent {
   fb = inject(FormBuilder);
   profileService = inject(ProfileService);
+  me = inject(ProfileService).me;
 
   store = inject(Store);
 
@@ -29,7 +35,7 @@ export class SettingsPageComponent {
   form = this.fb.group({
     firstName: ['', Validators.required],
     lastName: [''],
-    username: [{ value: '', disabled: true }, Validators.required],
+    username: this.fb.nonNullable.control(this.me()!.username,[Validators.required]),
     description: [''],
     stack: [''],
   });
@@ -43,6 +49,8 @@ export class SettingsPageComponent {
         stack: this.mergeStack(this.profileService.me()?.stack),
       });
     });
+
+    this.form.controls.username.disable()
   }
 
   onSave() {
@@ -78,5 +86,9 @@ export class SettingsPageComponent {
     if (Array.isArray(stack)) return stack.join(',');
 
     return stack;
+  }
+
+  clearForm(){
+    this.form.reset()
   }
 }

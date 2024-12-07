@@ -7,6 +7,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { AsyncPipe } from '@angular/common';
 import { SvgComponent, ImgUrlPipe } from '@tt/common-ui';
 import { ProfileHeaderComponent } from '../../ui';
+import { ProfileDescriptionComponent } from '../../ui/profile-description/profile-description.component';
 
 @Component({
   selector: 'app-profile-page',
@@ -18,6 +19,7 @@ import { ProfileHeaderComponent } from '../../ui';
     RouterLink,
     SvgComponent,
     PostFeedComponent,
+    ProfileDescriptionComponent
   ],
   templateUrl: './profile-page.component.html',
   styleUrl: './profile-page.component.scss',

@@ -1,6 +1,10 @@
-<div>
-  <app-profile-header></app-profile-header>
-</div>
+@if(me(); as me){
+  <div>
+    <app-profile-header [profile]="me"></app-profile-header>
+    <hr class="mb16">
+    <app-profile-description [profile]="me" ></app-profile-description>
+  </div>
+}
 
 <form class="profile-form__wrapper" [formGroup]="form">
   <div class="profile-form">
@@ -49,7 +53,7 @@
 
     <label class="tt-form-label">
       <span class="tt-form-label-text">Фото профиля</span>
-      <app-avatar-upload></app-avatar-upload>
+      <app-avatar-upload [avatarUrl]="me()!.avatarUrl | imgUrl" ></app-avatar-upload>
     </label>
     <label class="tt-form-label">
       <span class="tt-form-label-text">Навыки</span>
@@ -63,13 +67,13 @@
   </div>
   <div>
     <div class="profile-form__btns">
-      <button class="profile-form__btn">
+      <button (click)="clearForm()" class="profile-form__btn">
         <svg icon="delete"></svg>
       </button>
       <button class="profile-form__btn">
         <svg icon="logout"></svg>
       </button>
-      <button class="profile-form__canel_btn">Отмена</button>
+      <a [routerLink]="['/profile/me']" class="profile-form__canel_btn">Отмена</a>
       <button class="btn" (click)="onSave()">Сохранить</button>
     </div>
   </div>

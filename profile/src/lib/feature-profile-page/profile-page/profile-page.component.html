@@ -49,23 +49,7 @@
     </div>
 
     <div>
-      <h3 class="h6 mb16">Навыки</h3>
-      @if (profile.stack.length > 0) {
-      <div class="stack-wrapper">
-        @for (skill of profile.stack; track skill) {
-        <div class="skill_tag">{{ skill }}</div>
-        }
-      </div>
-      } @else {
-      <p class="medium-text mb16 ml8">Пока их нет</p>
-      }
-
-      <div class="mt16">
-        <h3 class="h6 mb16">О себе</h3>
-        <p class="medium-text ml8">
-          {{ profile.description ? profile.description : 'Здесь пусто' }}
-        </p>
-      </div>
+      <app-profile-description [profile]="profile" ></app-profile-description>
     </div>
   </div>
 </main>

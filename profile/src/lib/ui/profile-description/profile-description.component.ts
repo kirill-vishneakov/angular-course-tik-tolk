@@ -1,0 +1,14 @@
+import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Profile } from '@tt/interfaces/profile';
+
+@Component({
+  selector: 'app-profile-description',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './profile-description.component.html',
+  styleUrl: './profile-description.component.scss',
+})
+export class ProfileDescriptionComponent {
+  profile = input.required<Profile>()
+}

@@ -14,10 +14,6 @@ export class ProfileService {
   #globalStoreService = inject(GlobalStoreService);
   me = signal<Profile | null>(null);
 
-  getTestsAccounts() {
-    return this.http.get<Profile[]>(`${this.url}account/test_accounts`);
-  }
-
   getMe() {
     return this.http.get<Profile>(`${this.url}account/me`).pipe(
       tap((res) => {

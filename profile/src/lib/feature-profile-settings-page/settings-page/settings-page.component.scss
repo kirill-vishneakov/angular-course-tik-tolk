@@ -43,10 +43,12 @@
 }
 
 .profile-form__canel_btn {
+  padding: 10px 14px;
   height: 44px;
   width: 90px;
   background: none;
   border: 1px solid var(--light-color);
   color: var(--light-color);
   cursor: pointer;
+  text-decoration: none;
 }

@@ -1,15 +1,17 @@
 import { Component, Input, input, signal } from '@angular/core';
-import { SvgComponent, DndDirective } from '@tt/common-ui';
+import { SvgComponent, DndDirective, AvatarCircleComponent } from '@tt/common-ui';
+
 
 @Component({
   selector: 'app-avatar-upload',
   standalone: true,
-  imports: [SvgComponent, DndDirective],
+  imports: [SvgComponent, DndDirective, AvatarCircleComponent],
   templateUrl: './avatar-upload.component.html',
   styleUrl: './avatar-upload.component.scss',
 })
 export class AvatarUploadComponent {
-  preview = signal<string>('assets/imgs/img.png');
+  preview = signal<string>('');
+  @Input() avatarUrl = 'assets/images/avatar-upload.jpg';
 
   avatar: File | null = null;
 
@@ -34,4 +36,7 @@ export class AvatarUploadComponent {
     reader.readAsDataURL(file);
     this.avatar = file;
   }
-}
+
+  ngOnInit() {
+    this.preview.set(this.avatarUrl)
+}}
