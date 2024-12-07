@@ -4,30 +4,19 @@ import {
   HostListener,
   inject,
   Renderer2,
-  signal,
 } from '@angular/core';
 import { ChatsBtnComponent } from '../chats-btn/chats-btn.component';
-import { ChatsService } from '@tt/chat';
-import { AsyncPipe } from '@angular/common';
+import { chatsActions, selectFilteredChatsList, selectFilters } from '@tt/chat';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import {
-  audit,
-  fromEvent,
-  interval,
-  map,
-  startWith,
-  switchMap,
-  tap,
-  timer,
-} from 'rxjs';
+import { debounceTime, startWith, Subscription, tap, timer } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-chats-list',
   standalone: true,
   imports: [
     ChatsBtnComponent,
-    AsyncPipe,
     RouterLink,
     RouterLinkActive,
     ReactiveFormsModule,
@@ -36,27 +25,13 @@ import {
   styleUrl: './chats-list.component.scss',
 })
 export class ChatsListComponent {
-  chatsService = inject(ChatsService);
+  store = inject(Store);
 
-  filterChatsControl = new FormControl('');
-
-  chats$ = this.chatsService.getMyChats().pipe(
-    switchMap((chats) =>
-      this.filterChatsControl.valueChanges.pipe(
-        startWith(''),
-        map((inputV) => {
-          return chats.filter((chat) => {
-            if (!inputV) return true;
-            return `${chat.userFrom.firstName} ${chat.userFrom.lastName}`
-              .toLowerCase()
-              .includes(inputV.toLowerCase());
-          });
-        })
-      )
-    )
+  filterChatsControl = new FormControl(
+    this.store.selectSignal(selectFilters)()
   );
 
-  lastMessageRes = this.chatsService.lastMessageRes;
+  lastMessageRes = this.store.selectSignal(selectFilteredChatsList);
 
   hostElement = inject(ElementRef);
   r2 = inject(Renderer2);
@@ -73,14 +48,34 @@ export class ChatsListComponent {
     this.onWindowResize();
   }
 
-  ngOnInit() {
-    timer(0, 10000)
+  subscriberFilterForm!: Subscription;
+
+
+  constructor() {
+    this.subscriberFilterForm = this.filterChatsControl.valueChanges
+      .pipe(startWith(this.filterChatsControl.value), debounceTime(300))
+      .subscribe((val) => {
+        if (!val) val = '';
+        this.store.dispatch(chatsActions.chatsFiltered({ search: val }));
+      });
+
+      timer(0, 10000)
       .pipe(
-        switchMap(() => this.chats$),
-        tap((res) => {
-          this.lastMessageRes.set(res);
+        tap(() => {
+          this.store.dispatch(chatsActions.chatsGet());
+        }),
+        tap(() => {
+          this.store.dispatch(
+            chatsActions.chatsFiltered({
+              search: this.filterChatsControl.value ?? '',
+            })
+          );
         })
       )
       .subscribe();
+  }
+
+  ngOnDestroy(): void {
+    this.subscriberFilterForm.unsubscribe();
   }
 }

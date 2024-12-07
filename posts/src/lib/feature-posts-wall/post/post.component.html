@@ -1,40 +1,58 @@
 @if(post(); as post){
-<app-avatar-circle
-  [avatarUrl]="post.author.avatarUrl"
-  class="size32"
-></app-avatar-circle>
-<main class="post-body">
-  <div class="post-header">
-    <strong class="post__author">
-      {{ post.author.firstName }} {{ post.author.lastName }}
-      <span class="post-created-at">{{ post.createdAt | dateAgo }}</span>
-    </strong>
-  </div>
-  <p class="medium-text">
-    {{ post.content }}
-  </p>
+<div class="post-wrapper">
+  <app-avatar-circle
+    [avatarUrl]="post.author.avatarUrl"
+    class="size32"
+  ></app-avatar-circle>
+  <main class="post-body">
+    <div class="post-header">
+      <strong class="post__author">
+        {{ post.author.firstName }} {{ post.author.lastName }}
+        <span class="post-created-at">{{ post.updatedAt | dateAgo }}</span>
+      </strong>
 
-  <div class="post-counters">
-    <span class="counter-amount">
-      <svg icon="comments" class="svg16"></svg>
-      <span class="counter-length">{{ comment().length }}</span>
-    </span>
-    <span class="counter-amount">
-      <svg icon="likes" class="svg16"></svg>
-      <span class="counter-length likes">{{ post.likes }}</span>
-    </span>
-  </div>
+      <div class="post-header__icons">
+        <div (click)="onRen()" >
+          <svg class="svg32" [icon]="ren() ? 'noPen' : 'pen'"></svg>
+        </div>
+        <div (click)="deletePost(post.id)" >
+          <svg class="svg32" icon="delete"></svg>
+        </div>
+      </div>
+    </div>
 
-  <div class="post__comments-wrapper">
-    @for (comment of comment(); track comment.id) {
-    <app-comment [comment]="comment"></app-comment>
+    @if(ren()){
+    <input type="text" class="tt-form-input mb16" [(ngModel)]="title" />
+
+    <app-input (onClick)="renPost($event)" [value]="post.content"></app-input>
+    } @else {
+    <h3 class="h6">
+      {{ post.title }}
+    </h3>
+
+    <p class="regular">
+      {{ post.content }}
+    </p>
     }
-  </div>
+    <div class="post-counters">
+      <span class="counter-amount">
+        <svg icon="comments" class="svg16"></svg>
+        <span class="counter-length">{{ post.comments.length }}</span>
+      </span>
+      <span class="counter-amount">
+        <svg icon="likes" class="svg16"></svg>
+        <span class="counter-length likes">{{ post.likes }}</span>
+      </span>
+    </div>
 
-  <app-post-input
-    (created)="onCreated()"
-    [postId]="post.id"
-    [isCommentInput]="true"
-  ></app-post-input>
-</main>
+    <div class="post__comments-wrapper">
+      @for (comment of post.comments; track comment.id) {
+      <app-comment [comment]="comment"></app-comment>
+      }
+    </div>
+
+    <app-input (onClick)="onCreateComment($event, post.id)"> </app-input>
+  </main>
+</div>
+
 }

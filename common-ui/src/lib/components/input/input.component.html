@@ -5,10 +5,13 @@
 ></app-avatar-circle>
 
 <textarea
+  (keydown.enter)="handleEnter($event)"
   #textarea
   [(ngModel)]="postText"
   (input)="onTextareaInput($event)"
   class="hidden-textarea"
+  placeholder="Печатай... "
+  [value]="postText"
 ></textarea>
 
 <button (click)="onClickBtn()" class="btn-icon">

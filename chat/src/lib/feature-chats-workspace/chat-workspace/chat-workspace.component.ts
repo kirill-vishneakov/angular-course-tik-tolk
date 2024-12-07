@@ -1,17 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  HostListener,
-  inject,
-  Renderer2,
-} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ChatWorkspaceHeaderComponent } from './chat-workspace-header/chat-workspace-header.component';
 import { ChatWorkspaceMessagesWrapperComponent } from './chat-workspace-messages-wrapper/chat-workspace-messages-wrapper.component';
-import { InputComponent } from '@tt/common-ui';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ChatsService } from '@tt/chat';
-import { audit, filter, fromEvent, interval, of, switchMap } from 'rxjs';
+import { Chat, chatsActions, ChatsService, selectChat } from '@tt/chat';
+import { combineLatest, filter, map, Observable, of, switchMap, take, tap, timer } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-chat-workspace',
@@ -19,7 +13,6 @@ import { AsyncPipe } from '@angular/common';
   imports: [
     ChatWorkspaceHeaderComponent,
     ChatWorkspaceMessagesWrapperComponent,
-    InputComponent,
     AsyncPipe,
   ],
   templateUrl: './chat-workspace.component.html',
@@ -28,24 +21,37 @@ import { AsyncPipe } from '@angular/common';
 export class ChatWorkspaceComponent {
   route = inject(ActivatedRoute);
   router = inject(Router);
-  chatsService = inject(ChatsService);
+  store = inject(Store)
 
-  activeChat$ = this.route.params.pipe(
-    switchMap(({ id }) => {
-      if (id === 'new') {
-        return this.route.queryParams.pipe(
-          filter(({ userId }) => userId !== undefined),
-          switchMap(({ userId }) => {
-            return this.chatsService.createChat(userId).pipe(
-              switchMap((chat) => {
-                this.router.navigate(['chats', chat.id]);
-                return of(null);
-              })
-            );
-          })
+  activeChat$= combineLatest([
+    this.route.params.pipe(map(({ id }) => id)),
+    this.route.queryParams.pipe(map(({ userId }) => userId))
+  ]).pipe(
+    switchMap(([id, userId]) => {
+      if (id === 'new' && userId) {
+        this.store.dispatch(chatsActions.chatCreate({ userId: Number(userId) }));
+        return this.store.select(selectChat).pipe(
+          filter((chat) => chat !== null),
+          take(1),
+          tap((chat) => {
+            if (chat) {
+              this.router.navigate(['chats', chat.id]);
+            }
+          }),
+          map(() => null)
         );
       }
-      return this.chatsService.getChatById(id);
+
+      this.store.dispatch(chatsActions.getChatById({ chatId: Number(id) }));
+      return this.store.select(selectChat).pipe(
+        filter((chat) => chat !== null)
+      );
     })
   );
+
+  constructor() {
+    timer(0, 10000).pipe(
+      switchMap(() => this.activeChat$)
+    ).subscribe()
+  }
 }

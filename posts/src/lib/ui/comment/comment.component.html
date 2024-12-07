@@ -7,11 +7,21 @@
 <div class="comment-body mb16">
   <header class="comment-header">
     <span class="medium-text">{{ comment.author.username }}</span>
-    <span class="medium-text">{{ comment.createdAt | dateAgo }}</span>
+    <span class="medium-text">{{ comment.updatedAt | dateAgo }}</span>
   </header>
   <div class="comment-text">
-    <span>{{ comment.text }}</span>
+    @if(!ren()){
+    <span class="medium-text">{{ comment.text }}</span>
+    }
+    <button class="comment-btn medium-text" (click)="onRen()">
+      {{ ren() ? 'Отменить' : 'Изменить' }}
+    </button>
+    <button class="comment-btn medium-text" (click)="onDelete()">
+      Удалить
+    </button>
   </div>
+  @if(ren()){
+  <app-input [value]="comment.text" (onClick)="renCom($event)"></app-input>
+  }
 </div>
-
 }

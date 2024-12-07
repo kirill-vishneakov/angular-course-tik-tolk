@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
-import { Chat, LastMessageRes, Message } from '../interfaces/chats.interface';
+import { Chat, LastMessageRes, Message, RenMessageRes } from '../interfaces/chats.interface';
 import { map, tap } from 'rxjs';
 import { DateTime } from 'luxon';
 import { GlobalStoreService } from '@tt/shared';
@@ -15,26 +15,22 @@ export class ChatsService {
 
   lastMessageRes = signal<LastMessageRes[]>([]);
 
-  messages = signal<Message[]>([]);
-
   groupedMessages = signal<{ day: string; messages: Message[] }[]>([]);
 
-  groupMessagesByDay() {
+  groupMessagesByDay(messages: Message[]) {
     const groups: { [key: string]: Message[] } = {};
 
-    for (let message of this.messages()) {
+    for (let message of messages) {
       if (!groups[message.day]) {
         groups[message.day] = [];
       }
       groups[message.day].push(message);
     }
 
-    this.groupedMessages.set(
-      Object.keys(groups).map((day) => ({
-        day,
-        messages: groups[day],
-      }))
-    );
+    return Object.keys(groups).map((day) => ({
+      day,
+      messages: groups[day],
+    }));
   }
 
   createChat(userId: number) {
@@ -54,53 +50,70 @@ export class ChatsService {
             chat.userFirst.id === this.me()!.id
               ? chat.userSecond
               : chat.userFirst,
-          messages: chat.messages.map((message) => {
-            const date = DateTime.fromISO(message.createdAt).plus({ hour: 3 });
-            const dateNow = DateTime.now();
-            const yesterday = dateNow.minus({ days: 1 });
-            let day: string;
+          messagesGroup: this.groupMessagesByDay(
+            chat.messages.map((message) => {
+              const date = DateTime.fromISO(message.createdAt).plus({
+                hour: 3,
+              });
+              const dateNow = DateTime.now();
 
-            if (date.hasSame(dateNow, 'day')) {
-              day = 'Сегодня';
-            } else if (date.hasSame(yesterday, 'day')) {
-              day = 'Вчера';
-            } else {
-              day = date.toLocaleString(DateTime.DATE_SHORT);
-            }
-            return {
-              ...message,
-              user:
-                chat.userFirst.id === message.userFromId
-                  ? chat.userFirst
-                  : chat.userSecond,
-              isMine: message.userFromId === this.me()?.id,
-              day: day,
-            };
-          }),
+              const yesterday = dateNow.minus({ days: 1 });
+              let day: string;
+
+              if (date.hasSame(dateNow, 'day')) {
+                day = 'Сегодня';
+              } else if (date.hasSame(yesterday, 'day')) {
+                day = 'Вчера';
+              } else {
+                day = date.toLocaleString(DateTime.DATE_SHORT);
+              }
+              return {
+                ...message,
+                user:
+                  chat.userFirst.id === message.userFromId
+                    ? chat.userFirst
+                    : chat.userSecond,
+                isMine: message.userFromId === this.me()?.id,
+                day,
+              };
+            })
+          ),
         };
       }),
       tap((res) => {
-        this.messages.set(res.messages);
-        this.groupMessagesByDay();
+        this.groupedMessages.set(res.messagesGroup);
       })
     );
   }
 
   sendMessage(chatId: number, message: string) {
-    return this.http
-      .post<Message>(
-        `${this.url}message/send/${chatId}`,
-        {},
-        {
-          params: {
-            message,
-          },
-        }
-      )
-      .pipe(
-        tap((res) => {
-          this.messages().push(res);
-        })
-      );
+    return this.http.post<Message>(
+      `${this.url}message/send/${chatId}`,
+      {},
+      {
+        params: {
+          message,
+        },
+      }
+    );
   }
+
+  renMessage(messageId: number, text: string) {
+    return this.http.patch<RenMessageRes>(
+      `${this.url}message/${messageId}`,
+      {},
+      {
+        params: {
+          text,
+        },
+      }
+    );
+  }
+
+  deleteMessage(messageId: number) {
+    return this.http.delete<string>(
+      `${this.url}message/${messageId}`,
+    );
+  }
+
 }

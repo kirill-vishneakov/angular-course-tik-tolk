@@ -1,3 +1,7 @@
+import { ChatsEffects } from './../../../../chat/src/lib/data/store/effects';
+import { chatFeature } from './../../../../chat/src/lib/data/store/reducer';
+import { FormComponent } from '@tt/form';
+import { postsFeature, PostsEffects } from '@tt/posts';
 import { provideEffects } from '@ngrx/effects';
 import { Routes } from '@angular/router';
 import {
@@ -13,11 +17,18 @@ import { chatsRoutes } from '@tt/chat';
 import { provideState } from '@ngrx/store';
 
 export const routes: Routes = [
+  { path: 'login', component: LoginPageComponent },
+
   {
     path: '',
+    providers: [provideState(profileFeature), provideEffects(ProfileEffects)],
     component: LayoutComponent,
     children: [
-      { path: '', redirectTo: 'profile/me', pathMatch: 'full' },
+      {
+        path: '',
+        redirectTo: 'profile/me',
+        pathMatch: 'full',
+      },
       {
         path: 'search',
         component: SearchPageComponent,
@@ -26,11 +37,19 @@ export const routes: Routes = [
           provideEffects(ProfileEffects),
         ],
       },
-      { path: 'profile/:id', component: ProfilePageComponent },
+      {
+        path: 'profile/:id',
+        component: ProfilePageComponent,
+        providers: [provideState(postsFeature), provideEffects(PostsEffects)],
+      },
       { path: 'settings', component: SettingsPageComponent },
-      { path: 'chats', loadChildren: () => chatsRoutes },
+      {
+        path: 'chats',
+        loadChildren: () => chatsRoutes,
+        providers: [provideState(chatFeature), provideEffects(ChatsEffects)],
+      },
+      { path: 'form', component: FormComponent },
     ],
     canActivate: [canActivateAuth],
   },
-  { path: 'login', component: LoginPageComponent },
 ];

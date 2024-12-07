@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 export class DateAgoPipe implements PipeTransform {
   transform(value: string): string {
     const date = DateTime.fromISO(value).plus({ hour: 3 });
+
     const dateNow = DateTime.now();
 
     const diff = dateNow
@@ -29,8 +30,10 @@ export class DateAgoPipe implements PipeTransform {
         'месяцев'
       )} назад`;
     } else if (diff.days && diff.days > 0) {
-      return `${Math.floor(diff.days)} ${this.pluralize(
-        Math.floor(diff.days),
+      return `${
+        Math.floor(diff.days) >= 2 ? Math.floor(diff.days) + 1 : 1
+      } ${this.pluralize(
+        Math.floor(diff.days) >= 2 ? Math.floor(diff.days) + 1 : 1,
         'день',
         'дня',
         'дней'

@@ -5,7 +5,9 @@ import { SubscriberCardComponent } from './subscriber-card/subscriber-card.compo
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { ProfileService } from '@tt/profile';
 import { AsyncPipe, JsonPipe } from '@angular/common';
-import { firstValueFrom, map } from 'rxjs';
+import { filter, firstValueFrom, map, reduce } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { selectChat, selectFilteredChatsList } from '@tt/chat';
 
 @Component({
   selector: 'app-sidebar',
@@ -23,12 +25,19 @@ import { firstValueFrom, map } from 'rxjs';
 })
 export class SidebarComponent {
   profileService = inject(ProfileService);
+  store = inject(Store)
 
   subscribers$ = this.profileService
     .getSubscribersShortList()
     .pipe(map((res) => res.items.slice(0, 3)));
 
   me = this.profileService.me;
+
+  unreadMessages = this.store.select(selectFilteredChatsList).pipe(
+    filter(value => value !== null),
+    map((res) => res.map(item => item.unreadMessages)),
+    map(res => res.reduce((acc, curr) => acc + curr, 0))
+  )
 
   menu = [
     { icon: 'home', value: 'Моя страница', link: '/profile/me' },

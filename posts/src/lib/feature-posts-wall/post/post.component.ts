@@ -1,37 +1,71 @@
-import { AvatarCircleComponent, DateAgoPipe, SvgComponent } from '@tt/common-ui';
-import { Component, inject, input, OnInit, signal } from '@angular/core';
-import { CommentComponent, PostInputComponent } from '../../ui';
-import { firstValueFrom } from 'rxjs';
-import { PostService, Comment, Post } from '../../data';
+import { Component, inject, input, signal } from '@angular/core';
+import {
+  InputComponent,
+  AvatarCircleComponent,
+  SvgComponent,
+} from '@tt/common-ui';
+import { Post, postsActions } from '../../data';
+import { DateAgoPipe } from '@tt/common-ui';
+import { CommentComponent } from '../../ui/comment/comment.component';
+import { Store } from '@ngrx/store';
+import { GlobalStoreService } from '@tt/shared';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-post',
   standalone: true,
   imports: [
+    InputComponent,
     AvatarCircleComponent,
     DateAgoPipe,
     SvgComponent,
-    PostInputComponent,
     CommentComponent,
+    FormsModule,
   ],
   templateUrl: './post.component.html',
   styleUrl: './post.component.scss',
 })
-export class PostComponent implements OnInit {
-  post = input<Post>();
+export class PostComponent {
+  post = input.required<Post>();
+  profile = inject(GlobalStoreService).me;
+  store = inject(Store);
 
-  comment = signal<Comment[]>([]);
+  ren = signal(false);
+  title = '';
 
-  postService = inject(PostService);
-
-  ngOnInit() {
-    this.comment.set(this.post()!.comments);
+  onRen() {
+    this.ren.set(!this.ren());
   }
-  async onCreated() {
-    const comments = await firstValueFrom(
-      this.postService.getCommentsByPostId(this.post()!.id)
+
+  onCreateComment(postText: string, postId: number) {
+    this.store.dispatch(
+      postsActions.commentCreate({
+        comment: {
+          text: postText,
+          authorId: this.profile()!.id,
+          postId: postId,
+        },
+      })
+    );
+  }
+
+  deletePost(postId: number) {
+    this.store.dispatch(postsActions.postDelete({ postId }));
+  }
+
+  renPost(postText: string) {
+    this.store.dispatch(
+      postsActions.postRen({
+        postId: this.post()!.id,
+        title: this.title,
+        content: postText,
+      })
     );
 
-    this.comment.set(comments);
+    this.onRen();
+  }
+
+  ngOnInit(): void {
+    this.title =  this.post().title;
   }
 }

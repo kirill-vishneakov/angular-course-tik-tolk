@@ -20,4 +20,14 @@ export class ProfileEffects {
       map((res) => profileActions.profilesLoaded({ profiles: res.items }))
     );
   });
+
+  getMMe = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(profileActions.meGet),
+      switchMap(() => {
+        return this.profileService.getMe();
+      }),
+      map((me) => profileActions.meLoaded(me))
+    );
+  });
 }

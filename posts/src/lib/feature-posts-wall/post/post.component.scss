@@ -1,4 +1,4 @@
-:host {
+.post-wrapper {
   background: var(--dark-color);
   padding: 20px;
   border: 1px solid var(--light-color);
@@ -12,11 +12,22 @@
   grid-gap: 12px;
 }
 
+.post-header {
+  display: grid;
+  grid-template-columns: 1fr 70px;
+}
+
 .post__author {
   color: var(--light-color);
   font-size: 14px;
   font-weight: 700;
   line-height: 20px;
+}
+
+.post-header__icons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 12px;
 }
 
 .post-created-at {

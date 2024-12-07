@@ -9,6 +9,7 @@
   --dark-hover-color: #161616;
   --light-transparent-color: rgba(255, 255, 255, 0.75);
   --light-border: 1px solid var(--light-color);
+  --dark-border: 1px solid var(--dark-color);
   --message-color: #404040;
 }
 
@@ -68,6 +69,13 @@ body {
 .svg16 {
   width: 16px;
   height: 16px;
+  cursor: pointer;
+}
+
+.svg32 {
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
 }
 
 .btn-shadow {
@@ -166,6 +174,7 @@ body {
   color: var(--light-color);
   border-bottom: 1px solid var(--light-color);
   height: 33px;
+  width: 100%;
 
   &:focus-visible {
     outline: none;

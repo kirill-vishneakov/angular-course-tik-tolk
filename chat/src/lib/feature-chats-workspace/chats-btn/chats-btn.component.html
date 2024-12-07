@@ -9,17 +9,20 @@
     <div class="medium-text chat-user">
       {{ chat.userFrom.firstName }} {{ chat.userFrom.lastName }}
     </div>
+    @if(chat.createdAt){
     <div class="medium-text">
-      @if(chat.createdAt){
       {{ chat.createdAt | dateAgo }}
-      } @else { ...}
     </div>
+    }
   </div>
   <div class="last-message mt16">
     <div class="medium-text">
-      {{ chat.message || '...' }}
+      {{ chat.message || 'Вы успешно создали чат!' }}
     </div>
+    @if(chat.unreadMessages > 0){
+
     <div class="medium-text unread-messages">{{ chat.unreadMessages }}</div>
+    }
   </div>
 </div>
 

@@ -2,6 +2,9 @@
   display: grid;
   padding: 16px 20px;
   grid-template-rows: 1fr min-content;
+}
+
+.messages-wrapper {
   overflow-y: scroll;
   scrollbar-width: none;
 }
@@ -14,4 +17,8 @@
   background: var(--dark-hover-color);
   border-radius: 4px;
   margin-bottom: 16px;
+}
+
+.new-chat {
+  width: max-content;
 }

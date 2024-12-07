@@ -16,7 +16,13 @@
 </header>
 
 <main class="profile-page__body">
+  @if(isMyPage()){
   <app-post-feed></app-post-feed>
+  } @else {
+    <div>
+
+    </div>
+  }
   <div>
     <div class="subscribers_header">
       <h3 class="h6 mb16">Подписчики</h3>

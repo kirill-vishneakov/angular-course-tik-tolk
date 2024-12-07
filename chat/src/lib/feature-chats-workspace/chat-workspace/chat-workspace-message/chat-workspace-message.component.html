@@ -10,7 +10,26 @@
     <span>{{ message.createdAt | time }}</span>
   </strong>
   <div class="message-text medium-text">
-    {{ message.text }}
+    @if (!ren()){
+      <span>
+      {{ message.text }}
+    </span>}
+
+
+    @if(message.isMine){<div class="message-btns">
+      <div>
+        <svg [icon]="ren() ? 'noPen' : 'pen'" (click)="onRen()" class="svg16"></svg>
+        <svg class="svg16" icon="delete" (click)="deleteMessage.emit(message.id)"></svg>
+      </div>
+      <div class="is-read">
+        {{message.isRead ? '✓✓' : '✓'}}
+      </div>
+    </div>
+    } @else {
+      <span class="is-read">
+        {{message.isRead ? '✓✓' : '✓'}}
+      </span>
+    }
   </div>
 </div>
 

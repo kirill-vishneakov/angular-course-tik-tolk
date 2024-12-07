@@ -7,3 +7,4 @@ import {
 } from './interfaces/post.interface';
 
 export { Post, Comment, CommentCreateDto, PostCreateDto, PostService };
+export * from './store';

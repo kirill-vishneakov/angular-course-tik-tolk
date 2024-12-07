@@ -11,5 +11,5 @@ import { RouterLink } from '@angular/router';
   styleUrl: './chat-workspace-header.component.scss',
 })
 export class ChatWorkspaceHeaderComponent {
-  profile = input.required<Profile>();
+  profile = input<Profile>();
 }

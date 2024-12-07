@@ -12,6 +12,18 @@
   list-style: none;
 }
 
+.unreadMessages{
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  padding: 3px 6px;
+  text-align: center;
+  width: 30px;
+  height: 24px;
+  align-items: center;
+  border-radius: 4px;
+}
+
+
 .menu-item {
   padding: 16px 12px;
   cursor: pointer;

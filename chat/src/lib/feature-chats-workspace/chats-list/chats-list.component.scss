@@ -1,6 +1,9 @@
 :host {
   border-right: var(--light-border);
-  display: block;
+  display: grid;
+}
+
+.chats-list__wrapper {
   overflow-y: scroll;
   scrollbar-width: none;
 }

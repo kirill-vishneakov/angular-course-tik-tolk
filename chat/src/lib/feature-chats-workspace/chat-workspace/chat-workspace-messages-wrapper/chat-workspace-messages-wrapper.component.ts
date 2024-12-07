@@ -1,4 +1,4 @@
-import { audit, firstValueFrom, from, fromEvent, interval, map } from 'rxjs';
+
 import {
   Component,
   ElementRef,
@@ -7,34 +7,57 @@ import {
   input,
   Renderer2,
   signal,
+  ViewChild,
 } from '@angular/core';
 import { ChatWorkspaceMessageComponent } from '../chat-workspace-message/chat-workspace-message.component';
-import { InputComponent } from '@tt/common-ui';
-import { ChatsService, Chat } from '@tt/chat';
+import { AvatarCircleComponent, InputComponent, SvgComponent, TimePipe } from '@tt/common-ui';
+import {  Chat, chatsActions } from '@tt/chat';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-chat-workspace-messages-wrapper',
   standalone: true,
-  imports: [ChatWorkspaceMessageComponent, InputComponent],
+  imports: [ChatWorkspaceMessageComponent, InputComponent, AvatarCircleComponent, SvgComponent, TimePipe],
   templateUrl: './chat-workspace-messages-wrapper.component.html',
   styleUrl: './chat-workspace-messages-wrapper.component.scss',
 })
 export class ChatWorkspaceMessagesWrapperComponent {
+  @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   chat = input.required<Chat>();
-  chatsService = inject(ChatsService);
 
-  messages = this.chatsService.messages;
-  groupedMessages = this.chatsService.groupedMessages;
+  store = inject(Store);
+  value = signal('')
 
-  async onSendMessage(postText: string) {
-    await firstValueFrom(
-      this.chatsService.sendMessage(this.chat().id, postText)
+  ren= signal(false)
+  id = signal(0)
+  onRenComment(payload: {id: number, rename: boolean}) {
+    this.id.set(payload.id);
+    const message = this.chat().messages.filter(message => message.id === payload.id)[0];
+    this.value.set(message.text)
+    this.ren.set(!payload.rename)
+  }
+
+  deleteMessage(id: number) {
+    const message = this.chat().messages.filter(message => message.id === id)[0];
+    this.store.dispatch(chatsActions.messageDelete({messageId: message.id}))
+  }
+
+  renComment(postText: string){
+    this.store.dispatch(chatsActions.messageRen({ messageId: this.id(), text: postText }))
+    this.ren.set(true)
+  }
+
+  onSendMessage(postText: string) {
+    this.store.dispatch(
+      chatsActions.messageSend({ chatId: this.chat().id, message: postText })
     );
-    const chat = await firstValueFrom(
-      this.chatsService.getChatById(this.chat().id)
-    );
+    this.store.dispatch(chatsActions.chatsGet());
+    setTimeout(() => this.scrollTheEnd(), 0);
+  }
 
-    this.messages.set(chat.messages);
+  scrollTheEnd() {
+    const container = this.scrollContainer.nativeElement;
+    container.scrollTop = container.scrollHeight;
   }
 
   hostElement = inject(ElementRef);
@@ -50,5 +73,6 @@ export class ChatWorkspaceMessagesWrapperComponent {
 
   ngAfterViewInit() {
     this.onWindowResize();
+    this.scrollTheEnd();
   }
 }

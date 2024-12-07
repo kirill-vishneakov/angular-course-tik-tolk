@@ -6,6 +6,7 @@ export interface Chat {
   userSecond: Profile;
   messages: Message[];
   companion?: Profile;
+  messagesGroup?: { day: string; messages: Message[] }[];
 }
 
 export interface Message {
@@ -27,4 +28,14 @@ export interface LastMessageRes {
   message: string;
   createdAt: string;
   unreadMessages: number;
+}
+
+export interface RenMessageRes{
+  id: number
+  userFromId: number
+  personalChatId: number
+  text: string
+  createdAt: string
+  isRead: true
+  updatedAt:  string
 }

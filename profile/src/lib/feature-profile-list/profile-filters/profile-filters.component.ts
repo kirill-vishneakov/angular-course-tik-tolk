@@ -1,7 +1,17 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { profileActions, ProfileService } from '../../data';
-import { debounceTime, startWith } from 'rxjs';
+import {
+  profileActions,
+  selectFilteredProfiles,
+  selectSaveFilteredProfiles,
+} from '../../data';
+import {
+  BehaviorSubject,
+  debounceTime,
+  from,
+  startWith,
+  Subscription,
+} from 'rxjs';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -12,24 +22,34 @@ import { Store } from '@ngrx/store';
   styleUrl: './profile-filters.component.scss',
 })
 export class ProfileFiltersComponent {
-  profileService = inject(ProfileService);
-
   store = inject(Store);
 
   fb = inject(FormBuilder);
 
   searchForm = this.fb.group({
-    firstName: [''],
-    lastName: [''],
-    stack: [''],
-    city: [''],
+    firstName: [
+      this.store.selectSignal(selectSaveFilteredProfiles)()['firstName'],
+    ],
+    lastName: [
+      this.store.selectSignal(selectSaveFilteredProfiles)()['lastName'],
+    ],
+    stack: [this.store.selectSignal(selectSaveFilteredProfiles)()['stack']],
+    city: [this.store.selectSignal(selectSaveFilteredProfiles)()['city']],
   });
 
+  subscriberSearchForm!: Subscription;
+
   constructor() {
-    this.searchForm.valueChanges
+    this.subscriberSearchForm = this.searchForm.valueChanges
       .pipe(startWith({}), debounceTime(300))
-      .subscribe((formVal) => {
-        this.store.dispatch(profileActions.filterEvents({ filters: formVal }));
+      .subscribe(() => {
+        this.store.dispatch(
+          profileActions.filterEvents({ filters: this.searchForm.value })
+        );
       });
+  }
+
+  ngOnDestroy() {
+    this.subscriberSearchForm.unsubscribe();
   }
 }

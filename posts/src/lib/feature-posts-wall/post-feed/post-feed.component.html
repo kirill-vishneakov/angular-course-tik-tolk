@@ -1,4 +1,14 @@
-<app-post-input></app-post-input>
-@for(post of feed(); track post.id){
-<app-post [post]="post"></app-post>
-}
+<div class="mb16">
+  <input
+    type="text"
+    class="tt-form-input mb16"
+    placeholder="Заголовок:"
+    [(ngModel)]="title"
+  />
+  <app-input (onClick)="onCreatePost($event)"></app-input>
+</div>
+<div class="post-feed" #scrollContainer>
+  @for(post of feed(); track post.id){
+  <app-post [post]="post"></app-post>
+  }
+</div>

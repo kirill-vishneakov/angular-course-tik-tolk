@@ -1,15 +1,10 @@
 import { ProfileService } from '@tt/profile';
 import { Component, effect, inject, ViewChild } from '@angular/core';
 import { ProfileHeaderComponent, AvatarUploadComponent } from '../../ui';
-import {
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SvgComponent } from '@tt/common-ui';
 import { firstValueFrom } from 'rxjs';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-settings-page',
@@ -26,6 +21,8 @@ import { firstValueFrom } from 'rxjs';
 export class SettingsPageComponent {
   fb = inject(FormBuilder);
   profileService = inject(ProfileService);
+
+  store = inject(Store);
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
 
