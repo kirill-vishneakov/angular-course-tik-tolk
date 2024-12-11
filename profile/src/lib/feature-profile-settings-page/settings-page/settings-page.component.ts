@@ -1,4 +1,4 @@
-import { ProfileService } from '@tt/profile';
+import { profileActions, ProfileService, selectFilteredProfiles, selectMeLoaded } from '@tt/profile';
 import { Component, effect, inject, ViewChild } from '@angular/core';
 import { ProfileHeaderComponent, AvatarUploadComponent } from '../../ui';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -26,27 +26,27 @@ import { RouterLink } from '@angular/router';
 export class SettingsPageComponent {
   fb = inject(FormBuilder);
   profileService = inject(ProfileService);
-  me = inject(ProfileService).me;
-
   store = inject(Store);
+  me = this.store.selectSignal(selectMeLoaded);
+
+
 
   @ViewChild(AvatarUploadComponent) avatarUploader!: AvatarUploadComponent;
 
   form = this.fb.group({
     firstName: ['', Validators.required],
     lastName: [''],
-    username: this.fb.nonNullable.control(this.me()!.username,[Validators.required]),
+    username: this.fb.nonNullable.control(this.me()?.username,[Validators.required]),
     description: [''],
     stack: [''],
   });
 
   constructor() {
     effect(() => {
-      //@ts-ignore
       this.form.patchValue({
-        ...this.profileService.me(),
-        //@ts-ignore
-        stack: this.mergeStack(this.profileService.me()?.stack),
+        ...this.me(),
+
+        stack: this.mergeStack(this.me()?.stack),
       });
     });
 
@@ -65,13 +65,11 @@ export class SettingsPageComponent {
       );
     }
 
-    firstValueFrom(
+    this.store.dispatch(profileActions.meUpload({
+      ...this.form.value,
       //@ts-ignore
-      this.profileService.patchProfile({
-        ...this.form.value,
-        stack: this.splitStack(this.form.value.stack),
-      })
-    );
+      stack: this.splitStack(this.form.value.stack),
+    }))
   }
 
   splitStack(stack: string | null | string[] | undefined): string[] {
@@ -81,7 +79,7 @@ export class SettingsPageComponent {
     return stack.split(',');
   }
 
-  mergeStack(stack: string | null | [] | undefined) {
+  mergeStack(stack: string | null | string[] | undefined) {
     if (!stack) return '';
     if (Array.isArray(stack)) return stack.join(',');
 

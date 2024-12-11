@@ -5,9 +5,16 @@ import { Profile } from '../interfaces/profile.interface';
 export const profileActions = createActionGroup({
   source: 'profile',
   events: {
-    'filter events': props<{ filters: Record<string, any> }>(),
+    'filter events': props<{ filters: Record<string, string> }>(),
     'profiles loaded': props<{ profiles: Profile[] }>(),
+    'set page': props<{ page?: number }>(),
     'me get': emptyProps(),
     'me loaded': props<Profile>(),
+    'account get': props<{ accountId: number }>(),
+    'account loaded': props<Profile>(),
+    'subscribers get': emptyProps(),
+    'subscribers loaded': props<{profiles: Profile[]}>(),
+    'me upload': props<{profile: Partial<Profile>}>(),
+    'avatar upload': props<{file: File}>(),
   },
 });

@@ -4,24 +4,61 @@ import { Chat, LastMessageRes, Message, RenMessageRes } from '../interfaces/chat
 import { map, tap } from 'rxjs';
 import { DateTime } from 'luxon';
 
-import { ProfileService } from '../../profile';
+import { selectMeLoaded } from '../../profile';
+import { Store } from '@ngrx/store';
+import { ChatWsServiceI } from '@tt/data-access/chats/interfaces/chat-ws-service.interface';
+import { AuthService } from '@tt/auth';
+import { ChatWsService } from '@tt/data-access/chats/services/chat.ws.service';
+import { chatsActions } from '@tt/data-access/chats';
+import { ChatWsMessage } from '@tt/data-access/chats/interfaces/chat-ws-message.interface';
+import { isErrorMessage, isNewMessage, isUnreadMessage } from '@tt/data-access/chats/interfaces/type-guards';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChatsService {
   http = inject(HttpClient);
-  me = inject(ProfileService).me;
+  store = inject(Store);
+  authService = inject(AuthService);
+  me = this.store.selectSignal(selectMeLoaded)
   url = 'https://icherniakov.ru/yt-course/';
 
-  lastMessageRes = signal<LastMessageRes[]>([]);
+  wsAdapter: ChatWsServiceI = new ChatWsService()
 
-  groupedMessages = signal<{ day: string; messages: Message[] }[]>([]);
+  connectWs() {
+    return this.wsAdapter.connect({
+      url: `${this.url}chat/ws`,
+      token: this.authService.token ?? '',
+      handleMessage: this.handleWsMessage
+    })
+  }
+
+  handleWsMessage = (message: ChatWsMessage) => {
+    if (!('action' in message)) return
+
+    if(isUnreadMessage(message)){
+      this.store.dispatch(chatsActions.unreadMessages(message.data))
+      this.store.dispatch(chatsActions.chatsFiltered({search: ''}))
+    }
+
+    if(isNewMessage(message)){
+      this.store.dispatch(chatsActions.getChatById({chatId: message.data.chat_id}));
+      this.store.dispatch(chatsActions.chatsFiltered({search: ''}))
+    }
+    if (isErrorMessage(message)){
+      this.wsAdapter.disconnect()
+      this.wsAdapter.connect({
+        url: `${this.url}chat/ws`,
+        token: this.authService.token ?? '',
+        handleMessage: this.handleWsMessage
+      })
+    }
+  }
 
   groupMessagesByDay(messages: Message[]) {
     const groups: { [key: string]: Message[] } = {};
 
-    for (let message of messages) {
+    for (const message of messages) {
       if (!groups[message.day]) {
         groups[message.day] = [];
       }
@@ -48,7 +85,7 @@ export class ChatsService {
         return {
           ...chat,
           companion:
-            chat.userFirst.id === this.me()!.id
+            chat.userFirst.id === this.me()?.id
               ? chat.userSecond
               : chat.userFirst,
           messagesGroup: this.groupMessagesByDay(
@@ -80,9 +117,6 @@ export class ChatsService {
             })
           ),
         };
-      }),
-      tap((res) => {
-        this.groupedMessages.set(res.messagesGroup);
       })
     );
   }

@@ -1,4 +1,3 @@
-import { filter } from 'rxjs';
 import { createFeature, createReducer, on } from '@ngrx/store';
 import { Chat, LastMessageRes } from '../interfaces/chats.interface';
 import { chatsActions } from './actions';
@@ -7,12 +6,14 @@ export interface ChatsState {
   filteredChatsList: LastMessageRes[];
   chat: Chat | null;
   filter: string;
+  unreadMessages:number
 }
 
 export const initialState: ChatsState = {
   filteredChatsList: [],
   chat: null,
   filter: '',
+  unreadMessages: 0,
 };
 
 export const chatFeature = createFeature({
@@ -35,6 +36,12 @@ export const chatFeature = createFeature({
       return {
         ...state,
         filter: payload.search,
+      };
+    }),
+    on(chatsActions.unreadMessages, (state, payload) => {
+      return {
+        ...state,
+        unreadMessages: payload.count,
       };
     })
   ),

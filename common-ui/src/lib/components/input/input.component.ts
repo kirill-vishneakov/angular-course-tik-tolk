@@ -10,7 +10,8 @@ import {
 import { AvatarCircleComponent } from '../avatar-circle/avatar-circle.component';
 import { SvgComponent } from '../svg/svg.component';
 import { FormsModule } from '@angular/forms';
-import { ProfileService } from '@tt/data-access/profile';
+import { selectMeLoaded } from '@tt/data-access/profile';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'app-input',
@@ -27,7 +28,8 @@ export class InputComponent {
 
   postText = '';
   r2 = inject(Renderer2);
-  profile = inject(ProfileService).me;
+  store = inject(Store);
+  profile = this.store.selectSignal(selectMeLoaded);
 
   onTextareaInput(event: Event) {
     const textarea = event.target as HTMLTextAreaElement;

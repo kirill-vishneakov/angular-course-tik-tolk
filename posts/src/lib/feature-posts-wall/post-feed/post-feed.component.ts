@@ -17,7 +17,8 @@ import {
 
 import { FormsModule } from '@angular/forms';
 import { PostComponent } from '../post/post.component';
-import { ProfileService } from '@tt/data-access/profile';
+import { selectMeLoaded } from '@tt/data-access/profile';
+
 
 @Component({
   selector: 'app-post-feed',
@@ -34,9 +35,7 @@ export class PostFeedComponent {
   @ViewChild('scrollContainer') scrollContainer!: ElementRef;
   r2 = inject(Renderer2);
 
-  postService = inject(PostService);
-
-  profile = inject(ProfileService).me;
+  profile = this.store.selectSignal(selectMeLoaded);
 
   title!: string;
 

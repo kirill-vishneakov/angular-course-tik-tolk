@@ -15,3 +15,8 @@ export const selectFilters = createSelector(
   chatFeature.selectFilter,
   (filter) => filter
 );
+
+export const selectUnreadMessages = createSelector(
+  chatFeature.selectUnreadMessages,
+  (count) => count
+);

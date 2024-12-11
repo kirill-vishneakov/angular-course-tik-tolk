@@ -11,7 +11,7 @@ import {
 } from '@angular/core';
 import { ChatWorkspaceMessageComponent } from '../chat-workspace-message/chat-workspace-message.component';
 import { AvatarCircleComponent, InputComponent, SvgComponent, TimePipe } from '@tt/common-ui';
-import {  Chat, chatsActions } from '@tt/chat';
+import { Chat, chatsActions, ChatsService } from '@tt/chat';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -47,12 +47,15 @@ export class ChatWorkspaceMessagesWrapperComponent {
     this.ren.set(true)
   }
 
+  chatService = inject(ChatsService)
+
   onSendMessage(postText: string) {
-    this.store.dispatch(
-      chatsActions.messageSend({ chatId: this.chat().id, message: postText })
-    );
+
+    this.chatService.wsAdapter.sendMessage(postText, this.chat().id)
+
     this.store.dispatch(chatsActions.chatsGet());
-    setTimeout(() => this.scrollTheEnd(), 0);
+    this.store.dispatch(chatsActions.getChatById({chatId: this.chat().id}));
+    setTimeout(() => this.scrollTheEnd(), 1000);
   }
 
   scrollTheEnd() {

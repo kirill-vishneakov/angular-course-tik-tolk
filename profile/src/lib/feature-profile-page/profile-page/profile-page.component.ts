@@ -1,6 +1,11 @@
-import { PostFeedComponent } from '@tt/posts';
+import { PostFeedComponent, postsActions } from '@tt/posts';
 import { Component, inject, signal } from '@angular/core';
-import { ProfileService, selectMeLoaded } from '../../../../../data-access/src/lib/profile';
+import {
+  profileActions,
+  ProfileService,
+  selectAccountLoaded,
+  selectMeLoaded, selectSubLoaded
+} from '../../../../../data-access/src/lib/profile';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { map, switchMap } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
@@ -8,7 +13,7 @@ import { SvgComponent, ImgUrlPipe } from '@tt/common-ui';
 import { ProfileHeaderComponent } from '../../ui';
 import { ProfileDescriptionComponent } from '../../ui/profile-description/profile-description.component';
 import { Store } from '@ngrx/store';
-import { toObservable } from '@angular/core/rxjs-interop';
+
 
 @Component({
   selector: 'app-profile-page',
@@ -32,19 +37,20 @@ export class ProfilePageComponent {
 
   store = inject(Store);
 
-  me = toObservable(this.profileService.me);
+  me = this.store.select(selectMeLoaded);
+  meSignal = this.store.selectSignal(selectMeLoaded);
 
   isMyPage = signal(false);
 
-  subscribers$ = this.profileService
-    .getSubscribersShortList()
-    .pipe(map((res) => res.items.slice(0, 6)));
+  subscribers$ = this.store.select(selectSubLoaded)
+    .pipe(map((res) => res.slice(0, 6)));
 
   profile$ = this.route.params.pipe(
     switchMap(({ id }) => {
-      this.isMyPage.set(id === 'me' || id === this.profileService.me()?.id);
+      this.isMyPage.set(id === 'me' || id === this.meSignal()?.id);
       if (this.isMyPage()) return this.me;
-      return this.profileService.getAccount(id);
+      this.store.dispatch(profileActions.accountGet({accountId: Number(id)}));
+      return this.store.select(selectAccountLoaded);
     })
   );
 

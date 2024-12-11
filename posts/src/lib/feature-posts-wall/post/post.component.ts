@@ -9,7 +9,7 @@ import { DateAgoPipe } from '@tt/common-ui';
 import { CommentComponent } from '../../ui/comment/comment.component';
 import { Store } from '@ngrx/store';
 import { FormsModule } from '@angular/forms';
-import { ProfileService } from '@tt/data-access/profile';
+import { ProfileService, selectMeLoaded } from '@tt/data-access/profile';
 
 @Component({
   selector: 'app-post',
@@ -27,8 +27,9 @@ import { ProfileService } from '@tt/data-access/profile';
 })
 export class PostComponent {
   post = input.required<Post>();
-  profile = inject(ProfileService).me;
   store = inject(Store);
+  profile = this.store.selectSignal(selectMeLoaded);
+
 
   ren = signal(false);
   title = '';

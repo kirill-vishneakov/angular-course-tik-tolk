@@ -4,7 +4,7 @@
     <hr class="mb16">
     <app-profile-description [profile]="me" ></app-profile-description>
   </div>
-}
+
 
 <form class="profile-form__wrapper" [formGroup]="form">
   <div class="profile-form">
@@ -53,7 +53,7 @@
 
     <label class="tt-form-label">
       <span class="tt-form-label-text">Фото профиля</span>
-      <app-avatar-upload [avatarUrl]="me()!.avatarUrl | imgUrl" ></app-avatar-upload>
+      <app-avatar-upload [avatarUrl]="me.avatarUrl | imgUrl" ></app-avatar-upload>
     </label>
     <label class="tt-form-label">
       <span class="tt-form-label-text">Навыки</span>
@@ -78,3 +78,4 @@
     </div>
   </div>
 </form>
+}

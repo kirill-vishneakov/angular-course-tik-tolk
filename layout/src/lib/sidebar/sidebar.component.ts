@@ -3,11 +3,12 @@ import { Component, computed, inject, signal } from '@angular/core';
 import { SvgComponent, AvatarCircleComponent } from '@tt/common-ui';
 import { SubscriberCardComponent } from './subscriber-card/subscriber-card.component';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ProfileService } from '@tt/profile';
+import { profileActions, ProfileService, selectMeLoaded, selectSubLoaded } from '@tt/profile';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 import { filter, firstValueFrom, map, reduce } from 'rxjs';
 import { Store } from '@ngrx/store';
-import { selectChat, selectFilteredChatsList } from '@tt/chat';
+import { ChatsService, selectChat, selectFilteredChatsList, selectUnreadMessages } from '@tt/chat';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,20 +25,12 @@ import { selectChat, selectFilteredChatsList } from '@tt/chat';
   styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent {
-  profileService = inject(ProfileService);
   store = inject(Store)
 
-  subscribers$ = this.profileService
-    .getSubscribersShortList()
-    .pipe(map((res) => res.items.slice(0, 3)));
+  subscribers$ = this.store.select(selectSubLoaded)
+  .pipe(map((res) => res.slice(0, 3)));
 
-  me = this.profileService.me;
-
-  unreadMessages = this.store.select(selectFilteredChatsList).pipe(
-    filter(value => value !== null),
-    map((res) => res.map(item => item.unreadMessages)),
-    map(res => res.reduce((acc, curr) => acc + curr, 0))
-  )
+  me = this.store.selectSignal(selectMeLoaded);
 
   menu = [
     { icon: 'home', value: 'Моя страница', link: '/profile/me' },
@@ -49,7 +42,13 @@ export class SidebarComponent {
     { icon: 'search', value: 'Поиск', link: '/search' },
   ];
 
+  chatService = inject(ChatsService);
+
+  unreadMessages = this.store.select(selectUnreadMessages)
+
   ngOnInit() {
-    firstValueFrom(this.profileService.getMe());
+    this.store.dispatch(profileActions.meGet())
+    this.store.dispatch(profileActions.subscribersGet())
+    this.chatService.connectWs().subscribe()
   }
 }

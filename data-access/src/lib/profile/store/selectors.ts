@@ -15,3 +15,23 @@ export const selectMeLoaded = createSelector(
   profileFeature.selectMe,
   (me) => me
 );
+
+export const selectAccountLoaded = createSelector(
+  profileFeature.selectAccount,
+  (account) => account
+);
+
+export const selectSubLoaded = createSelector(
+  profileFeature.selectSubscribers,
+  (sub) => sub
+);
+
+export const selectProfilePageable = createSelector(
+  profileFeature.selectProfileFeatureState,
+  (state) => {
+    return {
+      page: state.page,
+      size: state.size
+    };
+  }
+);

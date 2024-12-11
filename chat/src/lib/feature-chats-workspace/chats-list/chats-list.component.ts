@@ -6,11 +6,12 @@ import {
   Renderer2,
 } from '@angular/core';
 import { ChatsBtnComponent } from '../chats-btn/chats-btn.component';
-import { chatsActions, selectFilteredChatsList, selectFilters } from '@tt/chat';
+import { chatsActions, ChatsService, selectFilteredChatsList, selectFilters } from '@tt/chat';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { debounceTime, startWith, Subscription, tap, timer } from 'rxjs';
+import { debounceTime, startWith} from 'rxjs';
 import { Store } from '@ngrx/store';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-chats-list',
@@ -48,34 +49,21 @@ export class ChatsListComponent {
     this.onWindowResize();
   }
 
-  subscriberFilterForm!: Subscription;
-
+  chatService = inject(ChatsService);
 
   constructor() {
-    this.subscriberFilterForm = this.filterChatsControl.valueChanges
-      .pipe(startWith(this.filterChatsControl.value), debounceTime(300))
+      this.filterChatsControl.valueChanges
+      .pipe(startWith(this.filterChatsControl.value), debounceTime(300), takeUntilDestroyed())
       .subscribe((val) => {
         if (!val) val = '';
         this.store.dispatch(chatsActions.chatsFiltered({ search: val }));
       });
 
-      timer(0, 10000)
-      .pipe(
-        tap(() => {
-          this.store.dispatch(chatsActions.chatsGet());
-        }),
-        tap(() => {
-          this.store.dispatch(
-            chatsActions.chatsFiltered({
-              search: this.filterChatsControl.value ?? '',
-            })
-          );
-        })
-      )
-      .subscribe();
+
+      // this.chatService.connectWs().pipe(
+      //   takeUntilDestroyed()
+      // ).subscribe()
+
   }
 
-  ngOnDestroy(): void {
-    this.subscriberFilterForm.unsubscribe();
-  }
 }

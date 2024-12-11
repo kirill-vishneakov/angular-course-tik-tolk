@@ -15,5 +15,6 @@ export const chatsActions = createActionGroup({
     'chat by id loaded': props<{
       chat: Chat;
     }>(),
+    'unread messages': props<{count: number}>()
   },
 });

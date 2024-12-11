@@ -49,9 +49,9 @@ export class ChatWorkspaceComponent {
     })
   );
 
-  constructor() {
-    timer(0, 10000).pipe(
-      switchMap(() => this.activeChat$)
-    ).subscribe()
-  }
+  // constructor() {
+  //   timer(0, 10000).pipe(
+  //     switchMap(() => this.activeChat$)
+  //   ).subscribe()
+  // }
 }
