@@ -26,7 +26,8 @@
       "@tt/layout": ["layout/src/index.ts"],
       "@tt/posts": ["posts/src/index.ts"],
       "@tt/profile": ["profile/src/index.ts"],
-      "@tt/shared": ["shared/src/index.ts"]
+      "@tt/shared": ["shared/src/index.ts"],
+      "@tt/swapi": ["swapi/src/index.ts"]
     },
     "baseUrl": ".",
     "rootDir": "."

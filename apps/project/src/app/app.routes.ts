@@ -1,5 +1,5 @@
-import { ChatsEffects } from '../../../../data-access/src/lib/chats/store/effects';
-import { chatFeature } from '../../../../data-access/src/lib/chats/store/reducer';
+import { SwapiComponent } from '@tt/swapi';
+import { ChatsEffects, chatFeature } from '@tt/data-access/chats';
 import { FormComponent } from '@tt/form';
 import { postsFeature, PostsEffects } from '@tt/posts';
 import { provideEffects } from '@ngrx/effects';
@@ -25,7 +25,10 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        providers: [provideState(profileFeature), provideEffects(ProfileEffects)],
+        providers: [
+          provideState(profileFeature),
+          provideEffects(ProfileEffects),
+        ],
         redirectTo: 'profile/me',
         pathMatch: 'full',
       },
@@ -49,6 +52,7 @@ export const routes: Routes = [
         providers: [provideState(chatFeature), provideEffects(ChatsEffects)],
       },
       { path: 'form', component: FormComponent },
+      { path: 'stars', component: SwapiComponent },
     ],
     canActivate: [canActivateAuth],
   },

@@ -40,6 +40,7 @@ export class SidebarComponent {
       link: '/chats',
     },
     { icon: 'search', value: 'Поиск', link: '/search' },
+    { icon: 'stars', value: 'Звездные войны', link: '/stars' },
   ];
 
   chatService = inject(ChatsService);
