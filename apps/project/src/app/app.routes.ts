@@ -1,4 +1,3 @@
-import { SwapiComponent } from '@tt/swapi';
 import { ChatsEffects, chatFeature } from '@tt/data-access/chats';
 import { FormComponent } from '@tt/form';
 import { postsFeature, PostsEffects } from '@tt/posts';
@@ -10,6 +9,7 @@ import {
   SearchPageComponent,
   profileFeature,
   ProfileEffects,
+  FriendPageComponent,
 } from '@tt/profile';
 import { LayoutComponent } from '@tt/layout';
 import { canActivateAuth, LoginPageComponent } from '@tt/auth';
@@ -33,6 +33,14 @@ export const routes: Routes = [
         pathMatch: 'full',
       },
       {
+        path: 'friends',
+        component: FriendPageComponent,
+        providers: [
+          provideState(profileFeature),
+          provideEffects(ProfileEffects),
+        ],
+      },
+      {
         path: 'search',
         component: SearchPageComponent,
         providers: [
@@ -52,7 +60,6 @@ export const routes: Routes = [
         providers: [provideState(chatFeature), provideEffects(ChatsEffects)],
       },
       { path: 'form', component: FormComponent },
-      { path: 'stars', component: SwapiComponent },
     ],
     canActivate: [canActivateAuth],
   },

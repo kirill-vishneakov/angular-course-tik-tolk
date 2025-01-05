@@ -5,6 +5,7 @@
   --dark-color: #000000;
   --light-color: #fff;
   --primary-color: #ae7aff;
+  --primary-color-hover: #916dca;
   --grey-color: #5f646d;
   --dark-hover-color: #161616;
   --light-transparent-color: rgba(255, 255, 255, 0.75);
@@ -54,6 +55,10 @@ body {
   cursor: pointer;
   border-radius: 4px;
   border: 1px solid var(--dark-color);
+  &:hover,
+  &:focus-visible {
+    background: var(--primary-color-hover);
+  }
 }
 
 .btn-icon {
@@ -64,6 +69,10 @@ body {
   cursor: pointer;
   border-radius: 4px;
   border: 1px solid var(--dark-color);
+  &:hover,
+  &:focus-visible {
+    background: var(--primary-color-hover);
+  }
 }
 
 .svg16 {
@@ -185,4 +194,24 @@ body {
   height: 84px;
   resize: none;
   overflow: hidden;
+}
+
+.tt-form-btn.active {
+  background: var(--primary-color-hover);
+}
+
+.tt-form-btn {
+  display: flex;
+  background: var(--dark-hover-color);
+  color: var(--light-color);
+  cursor: pointer;
+  border: var(--dark-border);
+  border-radius: 4px;
+  align-items: center;
+  padding-left: 25%;
+  text-decoration: none;
+  &:hover,
+  &:focus-visible {
+    background: var(--primary-color-hover);
+  }
 }

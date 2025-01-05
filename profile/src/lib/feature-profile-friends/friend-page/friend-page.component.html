@@ -1,0 +1,22 @@
+<div>
+  <h3>Друзья</h3>
+  @for (friend of friends(); track friend.id) {
+  <app-profile-card [profile]="friend"></app-profile-card>
+  }
+</div>
+
+<div>
+  <div>
+    <h3>Подписчики</h3>
+    @for (subscriber of uniqueSubscribers(); track subscriber.id) {
+    <app-profile-card [profile]="subscriber"></app-profile-card>
+    }
+  </div>
+  <div>
+    <h3>Подписки</h3>
+    @for (subscription of uniqueSubscription(); track subscription.id) {
+    <app-profile-card [profile]="subscription"></app-profile-card>
+    }
+  </div>
+  <a [routerLink]="['/search']">Искать друзей -></a>
+</div>

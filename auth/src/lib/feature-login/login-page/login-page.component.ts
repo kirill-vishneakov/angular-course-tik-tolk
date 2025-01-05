@@ -1,4 +1,4 @@
-import { AuthService } from '../../auth';
+import { AuthService } from '../../../../../data-access/src/lib/auth';
 import { Component, inject, signal } from '@angular/core';
 import {
   FormControl,

@@ -26,12 +26,20 @@ export const selectSubLoaded = createSelector(
   (sub) => sub
 );
 
+export const selectSubnLoaded = createSelector(
+  profileFeature.selectSubscription,
+  (sub) => {
+    console.log(sub);
+    return sub;
+  }
+);
+
 export const selectProfilePageable = createSelector(
   profileFeature.selectProfileFeatureState,
   (state) => {
     return {
       page: state.page,
-      size: state.size
+      size: state.size,
     };
   }
 );

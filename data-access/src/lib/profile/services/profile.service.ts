@@ -1,4 +1,3 @@
-
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable, signal } from '@angular/core';
 import { Pageble } from '../../shared';
@@ -12,9 +11,8 @@ export class ProfileService {
 
   url = 'https://icherniakov.ru/yt-course/';
 
-
   getMe() {
-    return this.http.get<Profile>(`${this.url}account/me`)
+    return this.http.get<Profile>(`${this.url}account/me`);
   }
 
   getAccount(id: number) {
@@ -23,6 +21,10 @@ export class ProfileService {
 
   getSubscribers() {
     return this.http.get<Pageble<Profile>>(`${this.url}account/subscribers/`);
+  }
+
+  getSubscription() {
+    return this.http.get<Pageble<Profile>>(`${this.url}account/subscriptions/`);
   }
 
   patchProfile(profile: Partial<Profile>) {

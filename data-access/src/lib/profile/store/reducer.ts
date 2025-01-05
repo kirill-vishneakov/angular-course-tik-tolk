@@ -9,6 +9,7 @@ export interface ProfileState {
   me: Profile | null;
   account: Profile | null;
   subscribers: Profile[];
+  subscription: Profile[];
   page: number;
   size: number;
 }
@@ -21,6 +22,7 @@ export const initialState: ProfileState = {
   subscribers: [],
   page: 1,
   size: 10,
+  subscription: [],
 };
 
 export const profileFeature = createFeature({
@@ -65,6 +67,12 @@ export const profileFeature = createFeature({
       return {
         ...state,
         subscribers: payload.profiles,
+      };
+    }),
+    on(profileActions.subscriptionLoaded, (state, payload) => {
+      return {
+        ...state,
+        subscription: payload.profiles,
       };
     })
   ),

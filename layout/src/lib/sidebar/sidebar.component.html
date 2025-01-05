@@ -9,9 +9,9 @@
       <a class="menu-item" [routerLink]="item.link" routerLinkActive="active">
         <svg [icon]="item.icon"></svg>
         <span>{{ item.value }}</span>
-        @if(item.value === "Чаты"){
-          @if(unreadMessages | async; as unreadMessages){
-          <span class="unreadMessages medium-text">{{ unreadMessages}}</span>
+        @if(item.value === "Чаты"){ @if(unreadMessages | async; as
+        unreadMessages){
+        <span class="unreadMessages medium-text">{{ unreadMessages }}</span>
         }}
       </a>
     </li>
@@ -26,7 +26,7 @@
 }
 
 <div class="mt20 to-subscribers">
-  <a class="to-subscribers-link medium-text" [routerLink]="['/subscribers']">
+  <a class="to-subscribers-link medium-text" [routerLink]="['/friends']">
     Все подписчики
   </a>
   <svg icon="arrow" class="to-subscribers-icon"></svg>
