@@ -9,7 +9,7 @@ import { Profile } from '../interfaces/profile.interface';
 export class ProfileService {
   http: HttpClient = inject(HttpClient);
 
-  url = 'https://icherniakov.ru/yt-course/';
+  url = '/yt-course/';
 
   getMe() {
     return this.http.get<Profile>(`${this.url}account/me`);
