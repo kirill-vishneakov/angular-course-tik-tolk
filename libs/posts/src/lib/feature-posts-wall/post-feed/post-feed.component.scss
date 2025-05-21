@@ -1,0 +1,13 @@
+:host {
+  display: grid;
+  grid-gap: 16px;
+}
+
+.post-feed {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+

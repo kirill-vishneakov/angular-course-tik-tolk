@@ -1,0 +1,10 @@
+:host{
+  display: grid;
+}
+
+.friends-wrapper{
+  overflow-y: scroll;
+  scrollbar-width: none;
+  display: flex;
+  flex-direction: column;
+}

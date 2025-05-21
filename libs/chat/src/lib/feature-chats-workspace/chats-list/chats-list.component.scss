@@ -1,0 +1,19 @@
+:host {
+  border-right: var(--light-border);
+  display: flex;
+  flex-direction: column;
+}
+
+.chats-list__wrapper {
+  display: flex;
+  flex-direction: column;
+  overflow-y: scroll;
+  scrollbar-width: none;
+  justify-content: first;
+}
+
+.chats-filters-input__wrapper {
+  display: flex;
+  padding: 16px 20px;
+  border-bottom: var(--light-border);
+}
